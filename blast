@@ -1,0 +1,50 @@
+import re
+infile=open('re','r')
+outfile=open('xcs','w')
+seq=''
+header2=''
+header=''
+a='2'
+
+for line in infile :
+
+    if 'Query=' in line and seq == ''and a=='2' :
+        header=line.split('[')[1].split(']')[0]
+        a='1'
+        
+    elif 'Query=' not in line and seq==''and a=='1':
+    
+        if line[0] == '>':
+        
+            header2=line.split('[')[1].split(']')[0]
+            
+        elif line[1:11]=='Identities':
+        
+            seq=seq+line                
+            outfile.write(header + header2 +seq)
+            seq=''
+            a='2'
+            header2=''
+           
+    elif 'Query=' in line and a=='1':
+            
+        outfile.write(header + header2 +seq+'\n')
+        header=line.split('[')[1].split(']')[0]
+        
+
+
+            
+    #outfile.write(header+header+seq)
+outfile.close()
+infile2=open('xcs','r')
+outfile2=open('xxx','w')
+c='gene='
+b = re.compile(c)
+
+for line in infile2:
+
+    out=re.subn(b,'  ',line)
+    outfile2.write(out[0])
+    #print out
+    
+outfile2.close()
